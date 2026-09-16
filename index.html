@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sarrog_tools - الرئيسية</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand"><img src="logo.png"><h1>sarrog_tools</h1></div>
+  <nav>
+    <a href="index.html">الرئيسية</a>
+    <a href="tests.html">الإختبارات</a>
+    <a href="projects.html">المشاريع</a>
+    <a href="ai.html">أدوات الذكاء</a>
+    <a href="about.html">معلومات عن الصفحة</a>
+    <a href="links.html">الروابط</a>
+    <a href="tools.html">الأدوات</a>
+  </nav>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="ابحث..." onkeyup="searchTools()">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+  <button class="theme-btn" onclick="toggleTheme()">🌓</button>
+</header>
+
+<div class="slider">
+  <div class="slides" id="slides">
+    <div class="slide"><h2>مرحبا بك في sarrog_tools</h2><p>كل الأدوات اللي تحتاجها في مكان واحد</p></div>
+    <div class="slide"><h2>أدوات الذكاء الاصطناعي</h2><p>جرب أقوى أدوات AI</p></div>
+    <div class="slide"><h2>مشاريع جاهزة</h2><p>قوالب تساعدك تبدأ أسرع</p></div>
+  </div>
+  <button class="slider-btn prev" onclick="moveSlide(-1)">❯</button>
+  <button class="slider-btn next" onclick="moveSlide(1)">❮</button>
+</div>
+
+<div class="ad-space">مساحة إعلانية - ضع كود AdSense هنا</div>
+
+<section>
+  <h2>أحدث الأدوات</h2>
+  <div class="tools-grid">
+    <div class="tool-card"><div class="tool-icon">🤖</div><h3>مولد النصوص</h3></div>
+    <div class="tool-card"><div class="tool-icon">🖼️</div><h3>مولد الصور</h3></div>
+    <div class="tool-card"><div class="tool-icon">⚙️</div><h3>أدوات مساعدة</h3></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-info">
+    <a href="mailto:info@sarrogtools.com">📧 info@sarrogtools.com</a>
+    <a href="tel:+249xxxxxxxx">📞 +249xxxxxxxx</a>
+    <a href="https://facebook.com" target="_blank">📘 فيسبوك</a>
+  </div>
+  <div class="copy">© 2026 sarrog_tools. كل الحقوق محفوظة</div>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>
