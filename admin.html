@@ -1,33 +1,78 @@
 <!DOCTYPE html><html lang="ar" dir="rtl">
-<head><meta charset="UTF-8"><title>لوحة التحكم - sarrog_tools</title><link rel="stylesheet" href="style.css"></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم الاحترافية</title><link rel="stylesheet" href="style.css">
+<style>
+.admin-wrap{max-width:700px; margin:40px auto; background:var(--card); padding:25px; border-radius:16px;}
+input, textarea, select{width:100%; padding:12px; margin:8px 0; border-radius:8px; border:1px solid #333; background:var(--bg); color:var(--text);}
+.tool-item{display:flex; justify-content:space-between; align-items:center; background:var(--bg); padding:10px; border-radius:8px; margin:8px 0;}
+</style>
+</head>
 <body>
-<div id="loginBox" style="max-width:400px; margin:100px auto; background:var(--card); padding:30px; border-radius:14px;">
-  <h2 style="text-align:center;">تسجيل الدخول</h2>
-  <input id="username" type="text" placeholder="اسم المستخدم" style="width:100%; padding:10px; margin:10px 0;">
-  <input id="password" type="password" placeholder="كلمة السر" style="width:100%; padding:10px; margin:10px 0;">
-  <button onclick="login()" style="width:100%; padding:12px; background:var(--accent); color:#fff; border:none; border-radius:8px;">دخول</button>
-  <p id="error" style="color:red; text-align:center;"></p>
+<div id="loginBox" class="admin-wrap">
+  <h2 style="text-align:center;">🔐 دخول الأدمن</h2>
+  <input id="username" placeholder="اسم المستخدم">
+  <input id="password" type="password" placeholder="كلمة السر">
+  <button onclick="login()" style="width:100%; padding:12px; background:var(--accent); color:#fff; border:none; border-radius:8px; margin-top:10px;">دخول</button>
+  <p id="error" style="color:red; text-align:center; margin-top:10px;"></p>
 </div>
-<div id="adminPanel" style="display:none; max-width:600px; margin:40px auto;">
-  <h2>إضافة أداة جديدة</h2>
-  <input id="toolName" placeholder="اسم الأداة" style="width:100%; padding:10px; margin:10px 0;">
-  <input id="toolIcon" placeholder="الإيموجي مثلا 🤖" style="width:100%; padding:10px; margin:10px 0;">
-  <select id="toolPage" style="width:100%; padding:10px; margin:10px 0;">
-    <option value="tools.html">الأدوات</option>
-    <option value="ai.html">أدوات الذكاء</option>
+
+<div id="adminPanel" class="admin-wrap" style="display:none;">
+  <h2>✨ لوحة تحكم sarrog_tools</h2>
+  <p style="color:var(--muted)">أضف أداة جديدة وهتظهر مباشر في الموقع</p>
+
+  <input id="toolName" placeholder="اسم الأداة مثلا: مولد الهاشتاقات">
+  <input id="toolIcon" placeholder="الأيقونة مثلا: #️⃣">
+  <textarea id="toolDesc" placeholder="وصف قصير للأداة"></textarea>
+  <input id="toolLink" placeholder="رابط الأداة (لو عندك) أو سيبه فاضي">
+  <select id="toolPage">
+    <option value="tools.html">صفحة الأدوات</option>
+    <option value="ai.html">صفحة أدوات الذكاء</option>
+    <option value="projects.html">صفحة المشاريع</option>
   </select>
-  <button onclick="addTool()" style="padding:10px 20px; background:var(--accent); color:#fff; border:none; border-radius:8px;">إضافة</button>
-  <button onclick="logout()" style="padding:10px 20px; background:red; color:#fff; border:none; border-radius:8px;">خروج</button>
-  <p id="msg"></p>
+
+  <button onclick="saveTool()" style="width:100%; padding:12px; background:var(--accent); color:#fff; border:none; border-radius:8px; margin-top:10px;">➕ إضافة الأداة الآن</button>
+  <button onclick="logout()" style="width:100%; padding:10px; background:#333; color:#fff; border:none; border-radius:8px; margin-top:8px;">خروج</button>
+
+  <h3 style="margin-top:25px;">📋 الأدوات اللي ضفتها</h3>
+  <div id="toolsList"></div>
+  <p id="msg" style="color:lightgreen; margin-top:10px;"></p>
+  <a href="index.html" style="display:block; text-align:center; margin-top:20px; color:var(--accent);">← الرجوع للموقع</a>
 </div>
+
 <script>
-const ADMIN_USER = "admin"; const ADMIN_PASS = "sarrog2026";
-function login(){const u = document.getElementById('username').value; const p = document.getElementById('password').value;
-if(u === ADMIN_USER && p === ADMIN_PASS){localStorage.setItem('loggedIn', 'true'); showPanel();} 
-else{document.getElementById('error').innerText = "خطأ في اسم المستخدم أو كلمة السر";}}
-function logout(){localStorage.removeItem('loggedIn'); location.reload();}
-function showPanel(){document.getElementById('loginBox').style.display = 'none'; document.getElementById('adminPanel').style.display = 'block';}
-function addTool(){const name = document.getElementById('toolName').value; const icon = document.getElementById('toolIcon').value; const page = document.getElementById('toolPage').value;
-document.getElementById('msg').innerText = `انسخ ده في script.js: {name: "${name}", page: "${page}", icon: "${icon}"},`;}
-if(localStorage.getItem('loggedIn') === 'true'){ showPanel(); }
-</script></body></html>
+const ADMIN_USER="admin"; const ADMIN_PASS="sarrog2026";
+function login(){
+  if(document.getElementById('username').value===ADMIN_USER && document.getElementById('password').value===ADMIN_PASS){
+    localStorage.setItem('adminLogged','true'); showPanel();
+  }else{ document.getElementById('error').innerText="خطأ في البيانات"; }
+}
+function logout(){ localStorage.removeItem('adminLogged'); location.reload(); }
+function showPanel(){ document.getElementById('loginBox').style.display='none'; document.getElementById('adminPanel').style.display='block'; loadTools(); }
+function saveTool(){
+  const name=document.getElementById('toolName').value; const icon=document.getElementById('toolIcon').value||'🛠️';
+  const desc=document.getElementById('toolDesc').value; const link=document.getElementById('toolLink').value||'#';
+  const page=document.getElementById('toolPage').value;
+  if(!name) return alert("اكتب اسم الأداة");
+  let tools=JSON.parse(localStorage.getItem('sarrog_custom_tools')||'[]');
+  tools.push({name, icon, desc, link, page, id:Date.now()});
+  localStorage.setItem('sarrog_custom_tools', JSON.stringify(tools));
+  document.getElementById('msg').innerText="تمت الإضافة بنجاح ✅ هتظهر في الموقع طوالي";
+  document.getElementById('toolName').value=''; document.getElementById('toolDesc').value='';
+  loadTools();
+}
+function loadTools(){
+  let tools=JSON.parse(localStorage.getItem('sarrog_custom_tools')||'[]');
+  let html=''; if(tools.length==0) html='<p style="color:var(--muted)">لسه ما ضفت أدوات</p>';
+  tools.forEach(t=>{
+    html+=`<div class="tool-item"><span>${t.icon} ${t.name} - ${t.page}</span><button onclick="deleteTool(${t.id})" style="background:red; color:#fff; border:none; padding:5px 10px; border-radius:6px;">حذف</button></div>`;
+  });
+  document.getElementById('toolsList').innerHTML=html;
+}
+function deleteTool(id){
+  let tools=JSON.parse(localStorage.getItem('sarrog_custom_tools')||'[]');
+  tools=tools.filter(t=>t.id!==id);
+  localStorage.setItem('sarrog_custom_tools', JSON.stringify(tools)); loadTools();
+}
+if(localStorage.getItem('adminLogged')==='true') showPanel();
+</script>
+</body></html>
