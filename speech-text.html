@@ -34,7 +34,7 @@
         .container {
             background-color: var(--card-bg);
             width: 100%;
-            max-width: 1000px; /* توسيع الواجهة لتستوعب مساحة أكبر */
+            max-width: 1000px;
             padding: 30px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
@@ -143,10 +143,9 @@
             gap: 15px;
         }
 
-        /* تكبير مستطيل النص واستيعاب النصوص الضخمة */
         textarea {
             width: 100%;
-            height: 480px; /* زيادة الارتفاع بشكل كبير */
+            height: 480px;
             padding: 20px;
             border: 1.5px solid var(--border-color);
             border-radius: 10px;
@@ -155,7 +154,7 @@
             line-height: 1.8;
             outline: none;
             margin-bottom: 16px;
-            overflow-y: auto; /* شريط تمرير ذكي للنصوص الطويلة جداً */
+            overflow-y: auto;
             background-color: #fafafa;
         }
 
@@ -175,13 +174,13 @@
 
 <div class="container">
     <h1>محول الصوت إلى نص المقالات الطويلة</h1>
-    <p class="subtitle">تحدث بحرية لإنشاء نصوص طويلة ودراسات تتجاوز الآلاف من الكلمات</p>
+    <p class="subtitle">يدعم العربية والإنجليزية والهوسا مع تنظيم المسافات والنصوص الممتدة</p>
 
     <div class="controls">
         <select id="languageSelect">
             <option value="ar-SA">العربية (Arabic)</option>
+            <option value="ha-NG">الهوسا (Hausa)</option>
             <option value="en-US">English (US)</option>
-            <option value="ha-NG">Hausa (Nigeria)</option>
         </select>
         <button id="startBtn" class="btn-primary">بدء التسجيل المستمر</button>
         <button id="stopBtn" class="btn-secondary" style="display:none;">إيقاف التسجيل</button>
@@ -199,8 +198,7 @@
         </div>
     </div>
 
-    <!-- المستطيل فارغ وجاهز لاستقبال النصوص الطويلة جدًا -->
-    <textarea id="output" placeholder="ابدأ الكلام وسيبدأ النص بالظهور هنا تلقائياً بدون حد أقصى..."></textarea>
+    <textarea id="output" placeholder="ابدأ الكلام وسيبدأ النص بالظهور هنا تلقائياً مع فاصل مسافات دقيق..."></textarea>
 
     <div class="actions">
         <button id="copyBtn" class="btn-outline">نسخ النص كامل</button>
@@ -220,10 +218,9 @@
     const wordCountDisplay = document.getElementById('wordCount');
     const charCountDisplay = document.getElementById('charCount');
 
-    let finalTranscript = ''; // متغير لحفظ الكلمات السابقة دون ضياع
+    let finalTranscript = '';
     let isRecognizing = false;
 
-    // دالة تحديث عداد الكلمات والحروف
     function updateCounters() {
         const text = output.value.trim();
         const words = text ? text.match(/\S+/g) : [];
@@ -239,17 +236,23 @@
         alert('متصفحك لا يدعم خاصية تحويل الصوت إلى نص. يُفضل استخدام Google Chrome.');
     } else {
         const recognition = new SpeechRecognition();
-        recognition.continuous = true; // استمرار التسجيل وعدم التوقف تلقائياً
-        recognition.interimResults = true; // إظهار الكلمات فور النطق بها
+        recognition.continuous = true;
+        recognition.interimResults = true;
 
         startBtn.addEventListener('click', () => {
             recognition.lang = languageSelect.value;
-            finalTranscript = output.value; // احتفاظ بالمتن الحالي إن وجد
+            finalTranscript = output.value;
+            
+            // إضافة مسافة في النهاية إن وجد نص سابق
+            if (finalTranscript && !finalTranscript.endsWith(' ')) {
+                finalTranscript += ' ';
+            }
+
             recognition.start();
             isRecognizing = true;
             startBtn.style.display = 'none';
             stopBtn.style.display = 'inline-block';
-            statusText.textContent = 'جاري الاستماع... يمكنك التحدث لفترات طويلة';
+            statusText.textContent = 'جاري الاستماع... تحدث بحرية';
             statusDot.classList.add('active');
         });
 
@@ -265,20 +268,20 @@
         recognition.onresult = (event) => {
             let interimTranscript = '';
             for (let i = event.resultIndex; i < event.results.length; ++i) {
+                const text = event.results[i][0].transcript.trim();
                 if (event.results[i].isFinal) {
-                    finalTranscript += event.results[i][0].transcript + ' ';
+                    // إضافة الكلمة أو الجملة مع إجبار وجود مسافة بعدها
+                    finalTranscript += text + ' ';
                 } else {
-                    interimTranscript += event.results[i][0].transcript;
+                    interimTranscript += text + ' ';
                 }
             }
-            output.value = finalTranscript + interimTranscript;
             
-            // التمرير التلقائي لأسفل مع زيادة حجم النص
+            output.value = finalTranscript + interimTranscript;
             output.scrollTop = output.scrollHeight;
             updateCounters();
         };
 
-        // إعادة التشغيل تلقائياً إذا توقف المحرك أثناء الكلام الطويل
         recognition.onend = () => {
             if (isRecognizing) {
                 recognition.start();
