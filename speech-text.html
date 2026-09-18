@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محول الصوت إلى نص</title>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 650px;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        select, button {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        select {
+            flex: 1;
+            background-color: #fff;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            font-weight: 600;
+        }
+
+        .btn-secondary:hover {
+            background-color: #dc2626;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-color);
+        }
+
+        .btn-outline:hover {
+            background-color: #f9fafb;
+        }
+
+        .status {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #9ca3af;
+        }
+
+        .status-dot.active {
+            background-color: #10b981;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            resize: vertical;
+            font-size: 1rem;
+            line-height: 1.6;
+            outline: none;
+            margin-bottom: 16px;
+        }
+
+        textarea:focus {
+            border-color: var(--primary-color);
+        }
+
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>محول الصوت إلى نص</h1>
+    <p class="subtitle">اضغط على زر التسجيل وتحدث لترجمة صوتك إلى نص مكتوب</p>
+
+    <div class="controls">
+        <select id="languageSelect">
+            <option value="ar-SA">العربية (السعودية)</option>
+            <option value="ar-EG">العربية (مصر)</option>
+            <option value="en-US">English (US)</option>
+        </select>
+        <button id="startBtn" class="btn-primary">بدأ التسجيل</button>
+        <button id="stopBtn" class="btn-secondary" style="display:none;">إيقاف</button>
+    </div>
+
+    <div class="status">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">جاهز للتسجيل</span>
+    </div>
+
+    <textarea id="output" placeholder="سيظهر النص المكتوب هنا..."></textarea>
+
+    <div class="actions">
+        <button id="copyBtn" class="btn-outline">نسخ النص</button>
+        <button id="clearBtn" class="btn-outline">مسح النص</button>
+    </div>
+</div>
+
+<script>
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const output = document.getElementById('output');
+    const statusText = document.getElementById('statusText');
+    const statusDot = document.getElementById('statusDot');
+    const languageSelect = document.getElementById('languageSelect');
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        alert('متصفحك لا يدعم خاصية تحويل الصوت إلى نص. يُفضل استخدام Google Chrome.');
+    } else {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = true;
+
+        startBtn.addEventListener('click', () => {
+            recognition.lang = languageSelect.value;
+            recognition.start();
+            startBtn.style.display = 'none';
+            stopBtn.style.display = 'inline-block';
+            statusText.textContent = 'جاري الاستماع...';
+            statusDot.classList.add('active');
+        });
+
+        stopBtn.addEventListener('click', () => {
+            recognition.stop();
+            startBtn.style.display = 'inline-block';
+            stopBtn.style.display = 'none';
+            statusText.textContent = 'تم الإيقاف';
+            statusDot.classList.remove('active');
+        });
+
+        recognition.onresult = (event) => {
+            let transcript = '';
+            for (let i = 0; i < event.results.length; i++) {
+                transcript += event.results[i][0].transcript;
+            }
+            output.value = transcript;
+        };
+
+        recognition.onerror = (event) => {
+            statusText.textContent = 'حدث خطأ: ' + event.error;
+            statusDot.classList.remove('active');
+        };
+
+        copyBtn.addEventListener('click', () => {
+            output.select();
+            document.execCommand('copy');
+            alert('تم نسخ النص إلى الحافظة!');
+        });
+
+        clearBtn.addEventListener('click', () => {
+            output.value = '';
+        });
+    }
+</script>
+
+</body>
+</html>
