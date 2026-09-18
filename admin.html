@@ -1,78 +1,124 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لوحة التحكم الاحترافية</title><link rel="stylesheet" href="style.css">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة التحكم - sarrog_tools</title>
 <style>
-.admin-wrap{max-width:700px; margin:40px auto; background:var(--card); padding:25px; border-radius:16px;}
-input, textarea, select{width:100%; padding:12px; margin:8px 0; border-radius:8px; border:1px solid #333; background:var(--bg); color:var(--text);}
-.tool-item{display:flex; justify-content:space-between; align-items:center; background:var(--bg); padding:10px; border-radius:8px; margin:8px 0;}
+:root{ --bg:#0f1115; --card:#171a21; --text:#e8ecf1; --muted:#a7b1c2; --accent:#4aa8ff; }
+body{ background:var(--bg); color:var(--text); font-family:Cairo,Tahoma; margin:0; padding:20px; }
+.box{ max-width:600px; margin:auto; background:var(--card); padding:20px; border-radius:16px; }
+input, select, textarea{ width:100%; padding:12px; margin:8px 0; border-radius:10px; border:1px solid #333; background:var(--bg); color:var(--text); }
+button{ background:var(--accent); color:#fff; border:none; padding:12px 20px; border-radius:10px; cursor:pointer; font-weight:700; width:100%; }
+button:disabled{ opacity:0.5; }
+#loginBox{ text-align:center; }
+.tool-item{ background:var(--bg); padding:12px; border-radius:10px; margin:8px 0; display:flex; justify-content:space-between; }
 </style>
 </head>
 <body>
-<div id="loginBox" class="admin-wrap">
-  <h2 style="text-align:center;">🔐 دخول الأدمن</h2>
-  <input id="username" placeholder="اسم المستخدم">
-  <input id="password" type="password" placeholder="كلمة السر">
-  <button onclick="login()" style="width:100%; padding:12px; background:var(--accent); color:#fff; border:none; border-radius:8px; margin-top:10px;">دخول</button>
-  <p id="error" style="color:red; text-align:center; margin-top:10px;"></p>
+
+<div id="loginBox" class="box">
+<h2>🔐 دخول الإدارة</h2>
+<input id="user" placeholder="اليوزر">
+<input id="pass" type="password" placeholder="الباسورد">
+<button onclick="login()">دخول</button>
+<p id="loginMsg" style="color:#ff5555"></p>
 </div>
 
-<div id="adminPanel" class="admin-wrap" style="display:none;">
-  <h2>✨ لوحة تحكم sarrog_tools</h2>
-  <p style="color:var(--muted)">أضف أداة جديدة وهتظهر مباشر في الموقع</p>
+<div id="adminBox" class="box" style="display:none">
+<h2>➕ إضافة أداة جديدة (تلقائي للجميع)</h2>
 
-  <input id="toolName" placeholder="اسم الأداة مثلا: مولد الهاشتاقات">
-  <input id="toolIcon" placeholder="الأيقونة مثلا: #️⃣">
-  <textarea id="toolDesc" placeholder="وصف قصير للأداة"></textarea>
-  <input id="toolLink" placeholder="رابط الأداة (لو عندك) أو سيبه فاضي">
-  <select id="toolPage">
-    <option value="tools.html">صفحة الأدوات</option>
-    <option value="ai.html">صفحة أدوات الذكاء</option>
-    <option value="projects.html">صفحة المشاريع</option>
-  </select>
+<input id="toolName" placeholder="اسم الأداة - مثال: مولد الهاشتاقات">
+<input id="toolIcon" placeholder="الأيقونة - مثال: #️⃣">
+<textarea id="toolDesc" placeholder="الوصف"></textarea>
+<input id="toolPage" placeholder="اسم الصفحة - مثال: hashtag.html أو اتركه فاضي">
+<select id="toolCat"><option value="tools">قسم الأدوات</option><option value="ai-tools">قسم أدوات الذكاء</option></select>
 
-  <button onclick="saveTool()" style="width:100%; padding:12px; background:var(--accent); color:#fff; border:none; border-radius:8px; margin-top:10px;">➕ إضافة الأداة الآن</button>
-  <button onclick="logout()" style="width:100%; padding:10px; background:#333; color:#fff; border:none; border-radius:8px; margin-top:8px;">خروج</button>
+<hr style="margin:15px 0; border-color:#232733">
+<h4>⚙️ إعداد الربط التلقائي (مرة واحدة فقط)</h4>
+<input id="ghToken" type="password" placeholder="GitHub Token - الصقه هنا">
+<input id="ghRepo" placeholder="اسم المستودع - مثال: seragsh55-afk/sarrog-tools">
+<p style="font-size:12px; color:var(--muted)">جيب التوكن من github.com/settings/tokens > Generate new token (classic) > علم على repo</p>
 
-  <h3 style="margin-top:25px;">📋 الأدوات اللي ضفتها</h3>
-  <div id="toolsList"></div>
-  <p id="msg" style="color:lightgreen; margin-top:10px;"></p>
-  <a href="index.html" style="display:block; text-align:center; margin-top:20px; color:var(--accent);">← الرجوع للموقع</a>
+<button id="addBtn" onclick="addToolAuto()">🚀 إضافة ونشر تلقائياً للجميع</button>
+<p id="status" style="font-size:13px; margin-top:10px; color:var(--muted)"></p>
+
+<h3 style="margin-top:20px">📋 الأدوات الحالية</h3>
+<div id="list"></div>
 </div>
 
 <script>
-const ADMIN_USER="admin"; const ADMIN_PASS="sarrog2026";
+const LOGIN_USER="admin", LOGIN_PASS="sarrog2026";
+let tools = JSON.parse(localStorage.getItem('sarrog_tools_db')||'[]');
+
 function login(){
-  if(document.getElementById('username').value===ADMIN_USER && document.getElementById('password').value===ADMIN_PASS){
-    localStorage.setItem('adminLogged','true'); showPanel();
-  }else{ document.getElementById('error').innerText="خطأ في البيانات"; }
+ if(document.getElementById('user').value===LOGIN_USER && document.getElementById('pass').value===LOGIN_PASS){
+   document.getElementById('loginBox').style.display='none';
+   document.getElementById('adminBox').style.display='block';
+   render();
+ } else { document.getElementById('loginMsg').textContent='بيانات خاطئة'; }
 }
-function logout(){ localStorage.removeItem('adminLogged'); location.reload(); }
-function showPanel(){ document.getElementById('loginBox').style.display='none'; document.getElementById('adminPanel').style.display='block'; loadTools(); }
-function saveTool(){
-  const name=document.getElementById('toolName').value; const icon=document.getElementById('toolIcon').value||'🛠️';
-  const desc=document.getElementById('toolDesc').value; const link=document.getElementById('toolLink').value||'#';
-  const page=document.getElementById('toolPage').value;
-  if(!name) return alert("اكتب اسم الأداة");
-  let tools=JSON.parse(localStorage.getItem('sarrog_custom_tools')||'[]');
-  tools.push({name, icon, desc, link, page, id:Date.now()});
-  localStorage.setItem('sarrog_custom_tools', JSON.stringify(tools));
-  document.getElementById('msg').innerText="تمت الإضافة بنجاح ✅ هتظهر في الموقع طوالي";
-  document.getElementById('toolName').value=''; document.getElementById('toolDesc').value='';
-  loadTools();
+
+function render(){
+ const list=document.getElementById('list');
+ list.innerHTML='';
+ tools.forEach((t,i)=>{
+   list.innerHTML+=`<div class="tool-item"><span>${t.icon} ${t.name}</span><button onclick="del(${i})" style="width:auto; background:#ff3b3b; padding:6px 10px;">حذف</button></div>`;
+ });
 }
-function loadTools(){
-  let tools=JSON.parse(localStorage.getItem('sarrog_custom_tools')||'[]');
-  let html=''; if(tools.length==0) html='<p style="color:var(--muted)">لسه ما ضفت أدوات</p>';
-  tools.forEach(t=>{
-    html+=`<div class="tool-item"><span>${t.icon} ${t.name} - ${t.page}</span><button onclick="deleteTool(${t.id})" style="background:red; color:#fff; border:none; padding:5px 10px; border-radius:6px;">حذف</button></div>`;
-  });
-  document.getElementById('toolsList').innerHTML=html;
+
+function del(i){ tools.splice(i,1); localStorage.setItem('sarrog_tools_db',JSON.stringify(tools)); render(); }
+
+// الوظيفة الجديدة التلقائية
+async function addToolAuto(){
+ const name=document.getElementById('toolName').value;
+ const icon=document.getElementById('toolIcon').value||'🔧';
+ const desc=document.getElementById('toolDesc').value;
+ const page=document.getElementById('toolPage').value||'tools.html';
+ const cat=document.getElementById('toolCat').value;
+ const token=document.getElementById('ghToken').value.trim();
+ const repo=document.getElementById('ghRepo').value.trim();
+ const status=document.getElementById('status');
+ const btn=document.getElementById('addBtn');
+
+ if(!name) return alert('اكتب اسم الأداة');
+ if(!token || !repo) return alert('لازم تدخل GitHub Token واسم المستودع عشان النشر التلقائي يشتغل');
+
+ btn.disabled=true; status.textContent='⏳ جاري النشر للجميع...';
+
+ const newTool={name, icon, desc, page, cat, id:Date.now()};
+ 
+ try{
+   // 1. نجيب ملف tools.json الحالي من GitHub
+   let sha=null, existing=[];
+   const getRes=await fetch(`https://api.github.com/repos/${repo}/contents/tools.json`, {headers:{Authorization:`token ${token}`}});
+   if(getRes.ok){ const data=await getRes.json(); sha=data.sha; existing=JSON.parse(atob(data.content)); }
+   
+   existing.push(newTool);
+   
+   // 2. نرفع الملف المحدث
+   const putRes=await fetch(`https://api.github.com/repos/${repo}/contents/tools.json`, {
+     method:'PUT',
+     headers:{Authorization:`token ${token}`, 'Content-Type':'application/json'},
+     body: JSON.stringify({
+       message: `Add tool: ${name}`,
+       content: btoa(unescape(encodeURIComponent(JSON.stringify(existing,null,2)))),
+       sha: sha
+     })
+   });
+
+   if(putRes.ok){
+     status.textContent='✅ تم النشر! الأداة هتظهر لكل الناس خلال دقيقة';
+     // حفظ محلي كمان
+     tools.push(newTool);
+     localStorage.setItem('sarrog_tools_db',JSON.stringify(tools));
+     render();
+     // امسح الحقول
+     document.getElementById('toolName').value=''; document.getElementById('toolDesc').value='';
+   } else { const err=await putRes.json(); status.textContent='❌ خطأ: '+(err.message||'فشل'); }
+ } catch(e){ status.textContent='❌ خطأ اتصال: '+e.message; }
+ btn.disabled=false;
 }
-function deleteTool(id){
-  let tools=JSON.parse(localStorage.getItem('sarrog_custom_tools')||'[]');
-  tools=tools.filter(t=>t.id!==id);
-  localStorage.setItem('sarrog_custom_tools', JSON.stringify(tools)); loadTools();
-}
-if(localStorage.getItem('adminLogged')==='true') showPanel();
 </script>
-</body></html>
+</body>
+</html>
