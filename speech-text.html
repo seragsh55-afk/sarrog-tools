@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محول الصوت إلى نص</title>
+    <title>محول الصوت إلى نص المقالات الطويلة</title>
     <style>
         :root {
             --primary-color: #4f46e5;
@@ -11,7 +11,7 @@
             --bg-color: #f3f4f6;
             --card-bg: #ffffff;
             --text-color: #1f2937;
-            --border-color: #e5e7eb;
+            --border-color: #d1d5db;
         }
 
         * {
@@ -34,10 +34,10 @@
         .container {
             background-color: var(--card-bg);
             width: 100%;
-            max-width: 650px;
+            max-width: 1000px; /* توسيع الواجهة لتستوعب مساحة أكبر */
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
         }
 
         h1 {
@@ -106,19 +106,29 @@
             background-color: #f9fafb;
         }
 
-        .status {
-            font-size: 0.85rem;
-            font-weight: 600;
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 10px;
-            color: #6b7280;
+            font-size: 0.9rem;
+            color: #4b5563;
+            font-weight: 600;
+            background-color: #f9fafb;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .status {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             background-color: #9ca3af;
         }
@@ -128,21 +138,30 @@
             box-shadow: 0 0 8px #10b981;
         }
 
+        .counters {
+            display: flex;
+            gap: 15px;
+        }
+
+        /* تكبير مستطيل النص واستيعاب النصوص الضخمة */
         textarea {
             width: 100%;
-            height: 200px;
-            padding: 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
+            height: 480px; /* زيادة الارتفاع بشكل كبير */
+            padding: 20px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
             resize: vertical;
-            font-size: 1rem;
-            line-height: 1.6;
+            font-size: 1.1rem;
+            line-height: 1.8;
             outline: none;
             margin-bottom: 16px;
+            overflow-y: auto; /* شريط تمرير ذكي للنصوص الطويلة جداً */
+            background-color: #fafafa;
         }
 
         textarea:focus {
             border-color: var(--primary-color);
+            background-color: #ffffff;
         }
 
         .actions {
@@ -155,29 +174,37 @@
 <body>
 
 <div class="container">
-    <h1>محول الصوت إلى نص</h1>
-    <p class="subtitle">اضغط على زر التسجيل وتحدث لترجمة صوتك إلى نص مكتوب</p>
+    <h1>محول الصوت إلى نص المقالات الطويلة</h1>
+    <p class="subtitle">تحدث بحرية لإنشاء نصوص طويلة ودراسات تتجاوز الآلاف من الكلمات</p>
 
     <div class="controls">
         <select id="languageSelect">
-            <option value="ar-SA">العربية (السعودية)</option>
-            <option value="ar-EG">العربية (مصر)</option>
+            <option value="ar-SA">العربية (Arabic)</option>
             <option value="en-US">English (US)</option>
+            <option value="ha-NG">Hausa (Nigeria)</option>
         </select>
-        <button id="startBtn" class="btn-primary">بدأ التسجيل</button>
-        <button id="stopBtn" class="btn-secondary" style="display:none;">إيقاف</button>
+        <button id="startBtn" class="btn-primary">بدء التسجيل المستمر</button>
+        <button id="stopBtn" class="btn-secondary" style="display:none;">إيقاف التسجيل</button>
     </div>
 
-    <div class="status">
-        <span class="status-dot" id="statusDot"></span>
-        <span id="statusText">جاهز للتسجيل</span>
+    <div class="status-bar">
+        <div class="status">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="statusText">جاهز للتسجيل</span>
+        </div>
+        <div class="counters">
+            <span id="wordCount">عدد الكلمات: 0</span>
+            <span>|</span>
+            <span id="charCount">عدد الحروف: 0</span>
+        </div>
     </div>
 
-    <textarea id="output" placeholder="سيظهر النص المكتوب هنا..."></textarea>
+    <!-- المستطيل فارغ وجاهز لاستقبال النصوص الطويلة جدًا -->
+    <textarea id="output" placeholder="ابدأ الكلام وسيبدأ النص بالظهور هنا تلقائياً بدون حد أقصى..."></textarea>
 
     <div class="actions">
-        <button id="copyBtn" class="btn-outline">نسخ النص</button>
-        <button id="clearBtn" class="btn-outline">مسح النص</button>
+        <button id="copyBtn" class="btn-outline">نسخ النص كامل</button>
+        <button id="clearBtn" class="btn-outline">مسح الشاشة</button>
     </div>
 </div>
 
@@ -190,6 +217,21 @@
     const statusText = document.getElementById('statusText');
     const statusDot = document.getElementById('statusDot');
     const languageSelect = document.getElementById('languageSelect');
+    const wordCountDisplay = document.getElementById('wordCount');
+    const charCountDisplay = document.getElementById('charCount');
+
+    let finalTranscript = ''; // متغير لحفظ الكلمات السابقة دون ضياع
+    let isRecognizing = false;
+
+    // دالة تحديث عداد الكلمات والحروف
+    function updateCounters() {
+        const text = output.value.trim();
+        const words = text ? text.match(/\S+/g) : [];
+        wordCountDisplay.textContent = `عدد الكلمات: ${words ? words.length : 0}`;
+        charCountDisplay.textContent = `عدد الحروف: ${output.value.length}`;
+    }
+
+    output.addEventListener('input', updateCounters);
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -197,47 +239,72 @@
         alert('متصفحك لا يدعم خاصية تحويل الصوت إلى نص. يُفضل استخدام Google Chrome.');
     } else {
         const recognition = new SpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = true;
+        recognition.continuous = true; // استمرار التسجيل وعدم التوقف تلقائياً
+        recognition.interimResults = true; // إظهار الكلمات فور النطق بها
 
         startBtn.addEventListener('click', () => {
             recognition.lang = languageSelect.value;
+            finalTranscript = output.value; // احتفاظ بالمتن الحالي إن وجد
             recognition.start();
+            isRecognizing = true;
             startBtn.style.display = 'none';
             stopBtn.style.display = 'inline-block';
-            statusText.textContent = 'جاري الاستماع...';
+            statusText.textContent = 'جاري الاستماع... يمكنك التحدث لفترات طويلة';
             statusDot.classList.add('active');
         });
 
         stopBtn.addEventListener('click', () => {
+            isRecognizing = false;
             recognition.stop();
             startBtn.style.display = 'inline-block';
             stopBtn.style.display = 'none';
-            statusText.textContent = 'تم الإيقاف';
+            statusText.textContent = 'تم إيقاف التسجيل';
             statusDot.classList.remove('active');
         });
 
         recognition.onresult = (event) => {
-            let transcript = '';
-            for (let i = 0; i < event.results.length; i++) {
-                transcript += event.results[i][0].transcript;
+            let interimTranscript = '';
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    finalTranscript += event.results[i][0].transcript + ' ';
+                } else {
+                    interimTranscript += event.results[i][0].transcript;
+                }
             }
-            output.value = transcript;
+            output.value = finalTranscript + interimTranscript;
+            
+            // التمرير التلقائي لأسفل مع زيادة حجم النص
+            output.scrollTop = output.scrollHeight;
+            updateCounters();
+        };
+
+        // إعادة التشغيل تلقائياً إذا توقف المحرك أثناء الكلام الطويل
+        recognition.onend = () => {
+            if (isRecognizing) {
+                recognition.start();
+            }
         };
 
         recognition.onerror = (event) => {
-            statusText.textContent = 'حدث خطأ: ' + event.error;
-            statusDot.classList.remove('active');
+            if (event.error !== 'no-speech') {
+                statusText.textContent = 'خطأ: ' + event.error;
+                statusDot.classList.remove('active');
+            }
         };
 
         copyBtn.addEventListener('click', () => {
+            if (!output.value) return;
             output.select();
             document.execCommand('copy');
-            alert('تم نسخ النص إلى الحافظة!');
+            alert('تم نسخ كامل النص بنجاح!');
         });
 
         clearBtn.addEventListener('click', () => {
-            output.value = '';
+            if (confirm('هل أنت تأكد من مسح النص الكامل؟')) {
+                output.value = '';
+                finalTranscript = '';
+                updateCounters();
+            }
         });
     }
 </script>
