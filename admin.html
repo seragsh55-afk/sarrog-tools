@@ -1,122 +1,35 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sarrog Admin PRO - شامل</title>
-<style>
-:root{--bg:#0f1115;--card:#171a21;--text:#e8ecf1;--muted:#a7b1c2;--accent:#4aa8ff;--border:#232733}
-*{box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:Cairo,Tahoma;margin:0;padding:12px}
-.box{max-width:920px;margin:auto;background:var(--card);padding:18px;border-radius:16px;border:1px solid var(--border)}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0;position:sticky;top:0;background:var(--card);z-index:10;padding:8px 0}
-.tab{padding:9px 14px;background:#232733;border-radius:10px;cursor:pointer;font-size:13px}.tab.active{background:var(--accent);color:#fff}
-.tabContent{display:none}.tabContent.active{display:block}
-.card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px;margin:10px 0}
-.card h4{margin:0 0 10px;color:var(--accent)}
-input,select,textarea{width:100%;padding:11px;margin:6px 0;border-radius:10px;border:1px solid #333;background:#0f1115;color:var(--text)}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:600px){.grid2{grid-template-columns:1fr}}
-.upload{border:2px dashed #444;padding:14px;text-align:center;border-radius:12px;cursor:pointer;background:#0f1115}
-.upload:hover{border-color:var(--accent)}.upload img{max-width:100%;max-height:110px;border-radius:8px;margin-top:8px;display:none}
-button{background:var(--accent);color:#fff;border:none;padding:12px;border-radius:10px;cursor:pointer;font-weight:700;width:100%}
-.btn-green{background:#22c55e}.btn-red{background:#ef4444}
-</style>
-</head>
-<body>
-<div id="loginBox" class="box" style="text-align:center;max-width:400px;margin-top:60px">
-<h2>🔐 دخول الإدارة الشاملة</h2><input id="user" placeholder="admin"><input id="pass" type="password" placeholder="sarrog2026"><button onclick="login()">دخول</button><p id="loginMsg" style="color:#ff5555"></p>
-</div>
-
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin PRO - sarrog_tools</title><style>:root{--bg:#0f1115;--card:#171a21;--text:#e8ecf1;--accent:#4aa8ff;--border:#232733}*{box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:Cairo,Tahoma;margin:0;padding:10px}.box{max-width:940px;margin:auto;background:var(--card);padding:16px;border-radius:16px;border:1px solid var(--border)}.tabs{display:flex;gap:6px;flex-wrap:wrap;position:sticky;top:0;background:var(--card);z-index:99;padding:10px 0}.tab{padding:8px 12px;background:#232733;border-radius:20px;cursor:pointer;font-size:12px}.tab.active{background:var(--accent);color:#fff}.tabContent{display:none}.tabContent.active{display:block}.card{background:#0f1115;border:1px solid var(--border);border-radius:12px;padding:12px;margin:10px 0}.card h4{margin:0 0 8px;color:var(--accent)}input,select,textarea{width:100%;padding:10px;margin:5px 0;border-radius:8px;border:1px solid #333;background:#0f1115;color:#fff}.upload{border:2px dashed #444;padding:12px;text-align:center;border-radius:10px;cursor:pointer}.upload img{max-width:100%;max-height:100px;display:none;margin-top:6px;border-radius:8px}button{width:100%;padding:11px;border:none;border-radius:10px;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.btn-green{background:#22c55e}.btn-red{background:#ef4444}@media(max-width:600px){.grid2{grid-template-columns:1fr}}</style></head><body>
+<div id="loginBox" class="box" style="max-width:380px;margin-top:60px;text-align:center"><h3>🔐 لوحة تحكم sarrog_tools</h3><input id="user" placeholder="admin"><input id="pass" type="password" placeholder="sarrog2026"><button onclick="login()">دخول</button><p id="loginMsg" style="color:red"></p></div>
 <div id="adminBox" class="box" style="display:none">
-<h2 style="margin:0">⚙️ لوحة تحكم sarrog_tools PRO</h2><small style="color:var(--muted)">تحكم كامل في الموقع والإعلانات</small>
-
+<h2 style="margin:0">⚙️ إدارة الموقع الشامل + الإعلانات</h2><small style="color:#a7b1c2">تعديل كل شيء: شعار، صور، بريد، هاتف، إعلانات، تسويق</small>
 <div class="tabs">
-<div class="tab active" onclick="openTab('general',this)">🌐 عام</div>
-<div class="tab" onclick="openTab('images',this)">🖼️ صور</div>
-<div class="tab" onclick="openTab('contact',this)">📞 تواصل</div>
-<div class="tab" onclick="openTab('ads',this)">📢 إعلانات</div>
-<div class="tab" onclick="openTab('marketing',this)">🚀 تسويق</div>
-<div class="tab" onclick="openTab('tools',this)">🧰 أدوات</div>
+<div class="tab active" onclick="openTab('general',this)">🌐 عام</div><div class="tab" onclick="openTab('images',this)">🖼️ صور</div><div class="tab" onclick="openTab('contact',this)">📞 تواصل</div><div class="tab" onclick="openTab('ads',this)">📢 إعلانات الرئيسية</div><div class="tab" onclick="openTab('marketing',this)">🚀 تسويق</div><div class="tab" onclick="openTab('tools',this)">🧰 أدوات</div>
 </div>
 
-<!-- عام -->
-<div id="general" class="tabContent active">
-<div class="card"><h4>اسم وهوية الموقع</h4><input id="siteName" placeholder="sarrog_tools">
-<div class="grid2">
-<div><label>شعار الموقع</label><div class="upload" onclick="clickFile('logoFile')">📷 رفع الشعار<img id="logoPrev"><input type="file" id="logoFile" accept="image/*" hidden onchange="toB64(this,'logoPrev','logoData')"></div><input type="hidden" id="logoData"></div>
-<div><label>Favicon</label><div class="upload" onclick="clickFile('favFile')">⭐ Favicon<img id="favPrev"><input type="file" id="favFile" accept="image/*" hidden onchange="toB64(this,'favPrev','favData')"></div><input type="hidden" id="favData"></div>
-</div><div class="grid2"><div><label>لون أساسي</label><input id="accentColor" type="color" value="#4aa8ff"></div><div><label>خلفية</label><input id="bgColor" type="color" value="#0f1115"></div></div>
-</div></div>
+<div id="general" class="tabContent active"><div class="card"><h4>🌐 الهوية</h4><input id="siteName" placeholder="اسم الموقع - sarrog_tools"><div class="grid2"><div><label>شعار الموقع</label><div class="upload" onclick="document.getElementById('logoFile').click()">📷 رفع الشعار<img id="logoPrev"><input type="file" id="logoFile" hidden accept="image/*" onchange="toB64(this,'logoPrev','logoData')"></div><input type="hidden" id="logoData"></div><div><label>Favicon</label><div class="upload" onclick="document.getElementById('favFile').click()">⭐ Favicon<img id="favPrev"><input type="file" id="favFile" hidden accept="image/*" onchange="toB64(this,'favPrev','favData')"></div><input type="hidden" id="favData"></div></div></div></div>
 
-<!-- صور -->
-<div id="images" class="tabContent">
-<div class="card"><h4>سلايدر الرئيسية</h4><div class="grid2">
-<div><div class="upload" onclick="clickFile('s1')">سلايد 1<img id="s1Prev"><input type="file" id="s1" accept="image/*" hidden onchange="toB64(this,'s1Prev','s1Data')"></div><input type="hidden" id="s1Data"><input id="s1Title" placeholder="عنوان 1"></div>
-<div><div class="upload" onclick="clickFile('s2')">سلايد 2<img id="s2Prev"><input type="file" id="s2" accept="image/*" hidden onchange="toB64(this,'s2Prev','s2Data')"></div><input type="hidden" id="s2Data"><input id="s2Title" placeholder="عنوان 2"></div>
-<div><div class="upload" onclick="clickFile('s3')">سلايد 3<img id="s3Prev"><input type="file" id="s3" accept="image/*" hidden onchange="toB64(this,'s3Prev','s3Data')"></div><input type="hidden" id="s3Data"><input id="s3Title" placeholder="عنوان 3"></div>
-</div></div>
+<div id="images" class="tabContent"><div class="card"><h4>🖼️ سلايدر الرئيسية (3 صور)</h4><div class="grid2"><div><div class="upload" onclick="document.getElementById('s1').click()">سلايد 1<img id="s1Prev"><input type="file" id="s1" hidden accept="image/*" onchange="toB64(this,'s1Prev','s1Data')"></div><input type="hidden" id="s1Data"><input id="s1Title" placeholder="عنوان 1"></div><div><div class="upload" onclick="document.getElementById('s2').click()">سلايد 2<img id="s2Prev"><input type="file" id="s2" hidden accept="image/*" onchange="toB64(this,'s2Prev','s2Data')"></div><input type="hidden" id="s2Data"><input id="s2Title" placeholder="عنوان 2"></div><div><div class="upload" onclick="document.getElementById('s3').click()">سلايد 3<img id="s3Prev"><input type="file" id="s3" hidden accept="image/*" onchange="toB64(this,'s3Prev','s3Data')"></div><input type="hidden" id="s3Data"><input id="s3Title" placeholder="عنوان 3"></div></div></div></div>
+
+<div id="contact" class="tabContent"><div class="card"><h4>📞 بيانات الفوتر - البريد والهاتف</h4><div class="grid2"><input id="email" placeholder="البريد - info@sarrogtools.com"><input id="phone" placeholder="الهاتف - +249..."></div><div class="grid2"><input id="whatsapp" placeholder="رابط واتساب - https://wa.me/..."><input id="facebook" placeholder="رابط فيسبوك"></div><input id="instagram" placeholder="انستقرام"><input id="address" placeholder="العنوان - أم درمان"><textarea id="footerText" placeholder="نص الحقوق © 2026 sarrog_tools"></textarea></div></div>
+
+<div id="ads" class="tabContent"><div class="card"><h4>📢 فورمات إعلانات الصفحة الرئيسية</h4>
+<b>🔝 إعلان علوي (فوق السلايدر)</b><div class="upload" onclick="document.getElementById('topAdImg').click()">📷 صورة الإعلان العلوي<img id="topAdImgPrev"><input type="file" id="topAdImg" hidden accept="image/*" onchange="toB64(this,'topAdImgPrev','topAdImgData')"></div><input type="hidden" id="topAdImgData"><div class="grid2"><input id="topAdLink" placeholder="رابط عند الضغط - https://..."><select id="topAdStatus"><option value="show">مفعل ✅</option><option value="hide">مخفي ❌</option></select></div><textarea id="topAdCode" placeholder="أو الصق كود AdSense هنا (اختياري)"></textarea><hr>
+<b>➖ إعلان وسطي (بين الأدوات والمشاريع)</b><div class="upload" onclick="document.getElementById('midAdImg').click()">📷 صورة الوسطي<img id="midAdImgPrev"><input type="file" id="midAdImg" hidden accept="image/*" onchange="toB64(this,'midAdImgPrev','midAdImgData')"></div><input type="hidden" id="midAdImgData"><div class="grid2"><input id="midAdLink" placeholder="رابط"><select id="midAdStatus"><option value="show">مفعل</option><option value="hide">مخفي</option></select></div><textarea id="midAdCode" placeholder="كود HTML"></textarea><hr>
+<b>🔻 إعلان سفلي (فوق الفوتر)</b><div class="upload" onclick="document.getElementById('bottomAdImg').click()">📷 صورة السفلي<img id="bottomAdImgPrev"><input type="file" id="bottomAdImg" hidden accept="image/*" onchange="toB64(this,'bottomAdImgPrev','bottomAdImgData')"></div><input type="hidden" id="bottomAdImgData"><div class="grid2"><input id="bottomAdLink" placeholder="رابط"><select id="bottomAdStatus"><option value="show">مفعل</option><option value="hide">مخفي</option></select></div><hr>
+<b>💥 إعلان منبثق Popup</b><div class="grid2"><select id="popupStatus"><option value="hide">معطل</option><option value="show">مفعل</option></select><input id="popupDelay" type="number" value="3" placeholder="يظهر بعد كم ثانية"></div><div class="upload" onclick="document.getElementById('popupImg').click()">📷 صورة البوب اب<img id="popupImgPrev"><input type="file" id="popupImg" hidden accept="image/*" onchange="toB64(this,'popupImgPrev','popupImgData')"></div><input type="hidden" id="popupImgData"><input id="popupLink" placeholder="رابط البوب اب"><textarea id="popupText" placeholder="نص تسويقي - مثال: خصم 50% اليوم فقط!"></textarea></div><div class="card"><h4>💰 كود AdSense العام</h4><textarea id="adsenseCode" rows="3" placeholder="<script> كود ادسنس"></textarea></div></div>
+
+<div id="marketing" class="tabContent"><div class="card"><h4>🚀 بنر تسويقي رئيسي</h4><input id="marketingTitle" placeholder="عنوان - 🚀 أفضل أدوات المطورين"><textarea id="marketingDesc" placeholder="وصف قصير"></textarea><div class="grid2"><input id="marketingBtnText" placeholder="نص الزر - جرب الآن مجانا"><input id="marketingBtnLink" placeholder="رابط الزر"></div><div class="upload" onclick="document.getElementById('marketingImg').click()">📷 صورة خلفية البنر<img id="marketingImgPrev"><input type="file" id="marketingImg" hidden accept="image/*" onchange="toB64(this,'marketingImgPrev','marketingImgData')"></div><input type="hidden" id="marketingImgData"><select id="marketingStatus"><option value="show">مفعل</option><option value="hide">مخفي</option></select></div><div class="card"><h4>🤝 شركاء / عملاء</h4><div class="grid2"><div><div class="upload" onclick="document.getElementById('p1').click()">شريك 1<img id="p1Prev"><input type="file" id="p1" hidden accept="image/*" onchange="toB64(this,'p1Prev','p1Data')"></div><input type="hidden" id="p1Data"><input id="p1Link" placeholder="رابط شريك 1"></div><div><div class="upload" onclick="document.getElementById('p2').click()">شريك 2<img id="p2Prev"><input type="file" id="p2" hidden accept="image/*" onchange="toB64(this,'p2Prev','p2Data')"></div><input type="hidden" id="p2Data"><input id="p2Link" placeholder="رابط شريك 2"></div><div><div class="upload" onclick="document.getElementById('p3').click()">شريك 3<img id="p3Prev"><input type="file" id="p3" hidden accept="image/*" onchange="toB64(this,'p3Prev','p3Data')"></div><input type="hidden" id="p3Data"><input id="p3Link" placeholder="رابط شريك 3"></div></div></div></div>
+
+<div id="tools" class="tabContent"><div class="card"><h4>➕ إضافة أداة مع أيقونة صورة</h4><input id="toolName" placeholder="اسم الأداة"><textarea id="toolDesc" placeholder="وصف"></textarea><input id="toolPage" placeholder="mytool.html"><div class="upload" onclick="document.getElementById('toolIconFile').click()">📷 أيقونة الأداة (صورة)<img id="toolIconPrev"><input type="file" id="toolIconFile" hidden accept="image/*" onchange="toB64(this,'toolIconPrev','toolIconData')"></div><input type="hidden" id="toolIconData"><input id="toolIconEmoji" placeholder="أو إيموجي 🔥"><select id="toolCat"><option value="tools">الأدوات</option><option value="ai-tools">أدوات الذكاء</option></select><button onclick="addTool()">إضافة للقائمة</button><div id="toolsList" style="margin-top:10px"></div></div></div>
+
+<div class="card"><h4>🔑 النشر التلقائي للجميع</h4><div class="grid2"><input id="ghToken" type="password" placeholder="GitHub Token - من github.com/settings/tokens"><input id="ghRepo" placeholder="seragsh55-afk/sarrog-tools"></div><small style="color:#a7b1c2">الـ Token: Generate new token classic > علم repo</small><button class="btn-green" onclick="saveAll()" style="margin-top:10px;font-size:16px">💾 حفظ ونشر كل التعديلات والإعلانات للجميع</button><p id="status" style="font-size:13px"></p></div>
 </div>
-
-<!-- تواصل -->
-<div id="contact" class="tabContent">
-<div class="card"><h4>📞 بيانات الفوتر</h4><div class="grid2"><input id="email" placeholder="البريد"><input id="phone" placeholder="الهاتف"></div>
-<div class="grid2"><input id="whatsapp" placeholder="رابط واتساب"><input id="facebook" placeholder="فيسبوك"></div>
-<input id="instagram" placeholder="انستقرام"><input id="address" placeholder="العنوان"><textarea id="footerText" placeholder="© 2026 sarrog_tools"></textarea></div>
-</div>
-
-<!-- إعلانات -->
-<div id="ads" class="tabContent">
-<div class="card"><h4>📢 بنرات إعلانية في الرئيسية</h4>
-
-<label>🔝 إعلان علوي (فوق السلايدر)</label>
-<div class="upload" onclick="clickFile('topAdImg')">صورة الإعلان العلوي<img id="topAdImgPrev"><input type="file" id="topAdImg" accept="image/*" hidden onchange="toB64(this,'topAdImgPrev','topAdImgData')"></div><input type="hidden" id="topAdImgData">
-<div class="grid2"><input id="topAdLink" placeholder="رابط عند الضغط"><select id="topAdStatus"><option value="show">مفعل ✅</option><option value="hide">مخفي</option></select></div>
-<textarea id="topAdCode" placeholder="أو كود HTML / AdSense (اختياري)"></textarea>
-
-<label>➖ إعلان وسطي (بين الأدوات والمشاريع)</label>
-<div class="upload" onclick="clickFile('midAdImg')">صورة الإعلان الوسطي<img id="midAdImgPrev"><input type="file" id="midAdImg" accept="image/*" hidden onchange="toB64(this,'midAdImgPrev','midAdImgData')"></div><input type="hidden" id="midAdImgData">
-<div class="grid2"><input id="midAdLink" placeholder="رابط"><select id="midAdStatus"><option value="show">مفعل</option><option value="hide">مخفي</option></select></div>
-<textarea id="midAdCode" placeholder="كود HTML"></textarea>
-
-<label>🔻 إعلان سفلي (فوق الفوتر)</label>
-<div class="upload" onclick="clickFile('bottomAdImg')">صورة الإعلان السفلي<img id="bottomAdImgPrev"><input type="file" id="bottomAdImg" accept="image/*" hidden onchange="toB64(this,'bottomAdImgPrev','bottomAdImgData')"></div><input type="hidden" id="bottomAdImgData">
-<div class="grid2"><input id="bottomAdLink" placeholder="رابط"><select id="bottomAdStatus"><option value="show">مفعل</option><option value="hide">مخفي</option></select></div>
-
-<label>💥 إعلان منبثق Popup</label>
-<div class="grid2"><select id="popupStatus"><option value="hide">معطل</option><option value="show">مفعل</option></select><input id="popupDelay" type="number" value="3" placeholder="يظهر بعد ثواني"></div>
-<div class="upload" onclick="clickFile('popupImg')">صورة البوب اب<img id="popupImgPrev"><input type="file" id="popupImg" accept="image/*" hidden onchange="toB64(this,'popupImgPrev','popupImgData')"></div><input type="hidden" id="popupImgData">
-<input id="popupLink" placeholder="رابط البوب اب"><textarea id="popupText" placeholder="نص تسويقي"></textarea>
-</div>
-<div class="card"><h4>💰 AdSense العام</h4><textarea id="adsenseCode" rows="3" placeholder="<script> كود ادسنس"></textarea></div>
-</div>
-
-<!-- تسويق -->
-<div id="marketing" class="tabContent">
-<div class="card"><h4>🚀 بنر تسويقي رئيسي</h4>
-<input id="marketingTitle" placeholder="عنوان - 🚀 أقوى أدوات المبرمجين"><textarea id="marketingDesc" placeholder="وصف قصير"></textarea>
-<div class="grid2"><input id="marketingBtnText" placeholder="نص الزر - جرب الآن"><input id="marketingBtnLink" placeholder="رابط الزر"></div>
-<div class="upload" onclick="clickFile('marketingImg')">صورة خلفية البنر<img id="marketingImgPrev"><input type="file" id="marketingImg" accept="image/*" hidden onchange="toB64(this,'marketingImgPrev','marketingImgData')"></div><input type="hidden" id="marketingImgData">
-<select id="marketingStatus"><option value="show">مفعل</option><option value="hide">مخفي</option></select>
-</div>
-<div class="card"><h4>🤝 شركاء / عملاء</h4><div class="grid2">
-<div><div class="upload" onclick="clickFile('p1')">شريك 1<img id="p1Prev"><input type="file" id="p1" accept="image/*" hidden onchange="toB64(this,'p1Prev','p1Data')"></div><input type="hidden" id="p1Data"><input id="p1Link" placeholder="رابط"></div>
-<div><div class="upload" onclick="clickFile('p2')">شريك 2<img id="p2Prev"><input type="file" id="p2" accept="image/*" hidden onchange="toB64(this,'p2Prev','p2Data')"></div><input type="hidden" id="p2Data"><input id="p2Link" placeholder="رابط"></div>
-<div><div class="upload" onclick="clickFile('p3')">شريك 3<img id="p3Prev"><input type="file" id="p3" accept="image/*" hidden onchange="toB64(this,'p3Prev','p3Data')"></div><input type="hidden" id="p3Data"><input id="p3Link" placeholder="رابط"></div>
-</div></div>
-</div>
-
-<!-- أدوات -->
-<div id="tools" class="tabContent">
-<div class="card"><h4>➕ أداة جديدة</h4><input id="toolName" placeholder="اسم الأداة"><textarea id="toolDesc" placeholder="وصف"></textarea><input id="toolPage" placeholder="mytool.html">
-<div class="upload" onclick="clickFile('toolIconFile')">أيقونة الأداة<img id="toolIconPrev"><input type="file" id="toolIconFile" accept="image/*" hidden onchange="toB64(this,'toolIconPrev','toolIconData')"></div><input type="hidden" id="toolIconData">
-<input id="toolIconEmoji" placeholder="أو إيموجي"><select id="toolCat"><option value="tools">الأدوات</option><option value="ai-tools">ذكاء</option></select><button onclick="addTool()">إضافة</button><div id="toolsList" style="margin-top:10px"></div></div>
-</div>
-
-<hr style="border-color:var(--border)"><div class="card"><h4>🔑 نشر تلقائي</h4><div class="grid2"><input id="ghToken" type="password" placeholder="GitHub Token"><input id="ghRepo" placeholder="seragsh55-afk/sarrog-tools"></div><button class="btn-green" onclick="saveAll()" style="margin-top:10px;font-size:16px">💾 حفظ ونشر كل شيء للجميع</button><p id="status"></p></div>
-</div>
-
 <script>
-const LOGIN_USER="admin",LOGIN_PASS="sarrog2026";let tools=[],settings={};
-function login(){if(user.value===LOGIN_USER&&pass.value===LOGIN_PASS){loginBox.style.display='none';adminBox.style.display='block';load();}else loginMsg.textContent='خطأ';}
+let tools=[];function login(){if(user.value==='admin'&&pass.value==='sarrog2026'){loginBox.style.display='none';adminBox.style.display='block';tools=JSON.parse(localStorage.getItem('sarrog_tools_db')||'[]');renderTools();loadS();}else loginMsg.textContent='بيانات خطأ';}
 function openTab(id,el){document.querySelectorAll('.tabContent').forEach(c=>c.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');if(el)el.classList.add('active');}
-function clickFile(id){document.getElementById(id).click();}
-function toB64(inp,prevId,dataId){const f=inp.files[0];if(!f)return;if(f.size>900*1024)return alert('الصورة كبيرة >900KB');const r=new FileReader();r.onload=e=>{const img=document.getElementById(prevId);img.src=e.target.result;img.style.display='block';document.getElementById(dataId).value=e.target.result;};r.readAsDataURL(f);}
-function load(){tools=JSON.parse(localStorage.getItem('sarrog_tools_db')||'[]');settings=JSON.parse(localStorage.getItem('sarrog_settings')||'{}');for(const k in settings){const el
+function toB64(i,p,d){const f=i.files[0];if(!f)return;if(f.size>900*1024)return alert('الصورة كبيرة >900KB');const r=new FileReader();r.onload=e=>{document.getElementById(p).src=e.target.result;document.getElementById(p).style.display='block';document.getElementById(d).value=e.target.result;};r.readAsDataURL(f);}
+function renderTools(){toolsList.innerHTML='';tools.forEach((t,i)=>{const ic=t.icon?.startsWith('data:')?`<img src="${t.icon}" style="width:26px;height:26px;border-radius:6px;object-fit:cover">`:t.icon;toolsList.innerHTML+=`<div style="display:flex;justify-content:space-between;align-items:center;background:#0f1115;padding:8px;border-radius:8px;margin:5px 0"><span style="display:flex;gap:6px;align-items:center">${ic} ${t.name}</span><button onclick="tools.splice(${i},1);localStorage.setItem('sarrog_tools_db',JSON.stringify(tools));renderTools()" style="width:auto;background:#ef4444;padding:5px 10px">حذف</button></div>`;});}
+function addTool(){const n=toolName.value.trim();if(!n)return alert('اكتب اسم الأداة');let ic=toolIconData.value||toolIconEmoji.value||'🔧';tools.push({name:n,icon:ic,desc:toolDesc.value,page:toolPage.value||'#',cat:toolCat.value,id:Date.now()});localStorage.setItem('sarrog_tools_db',JSON.stringify(tools));renderTools();toolName.value='';toolDesc.value='';toolPage.value='';toolIconData.value='';document.getElementById('toolIconPrev').style.display='none';toolIconEmoji.value='';}
+function loadS(){const s=JSON.parse(localStorage.getItem('sarrog_settings')||'{}');for(const k in s){const e=document.getElementById(k);if(!e)continue;if(typeof s[k]==='string'&&s[k].startsWith('data:')){const pr=document.getElementById(k.replace('Data','Prev'));if(pr){pr.src=s[k];pr.style.display='block';}e.value=s[k];}else if(typeof s[k]==='string'){if(e.tagName!=='IMG')e.value=s[k];}}}
+async function saveAll(){const V=id=>document.getElementById(id)?.value||'';const S={siteName:V('siteName'),email:V('email'),phone:V('phone'),whatsapp:V('whatsapp'),facebook:V('facebook'),instagram:V('instagram'),address:V('address'),footerText:V('footerText'),logo:V('logoData'),fav:V('favData'),s1Data:V('s1Data'),s2Data:V('s2Data'),s3Data:V('s3Data'),s1Title:V('s1Title'),s2Title:V('s2Title'),s3Title:V('s3Title'),topAdImgData:V('topAdImgData'),topAdLink:V('topAdLink'),topAdStatus:V('topAdStatus'),topAdCode:V('topAdCode'),midAdImgData:V('midAdImgData'),midAdLink:V('midAdLink'),midAdStatus:V('midAdStatus'),midAdCode:V('midAdCode'),bottomAdImgData:V('bottomAdImgData'),bottomAdLink:V('bottomAdLink'),bottomAdStatus:V('bottomAdStatus'),popupImgData:V('popupImgData'),popupLink:V('popupLink'),popupStatus:V('popupStatus'),popupDelay:V('popupDelay'),popupText:V('popupText'),adsenseCode:V('adsenseCode'),marketingTitle:V('marketingTitle'),marketingDesc:V('marketingDesc'),marketingBtnText:V('marketingBtnText'),marketingBtnLink:V('marketingBtnLink'),marketingImgData:V('marketingImgData'),marketingStatus:V('marketingStatus'),p1Data:V('p1Data'),p1Link:V('p1Link'),p2Data:V('p2Data'),p2Link:V('p2Link'),p3Data:V('p3Data'),p3Link:V('p3Link')};localStorage.setItem('sarrog_settings',JSON.stringify(S));localStorage.setItem('sarrog_tools_db',JSON.stringify(tools));status.textContent='✅ حفظ محلي تم';const token=ghToken.value.trim(),repo=ghRepo.value.trim();if(!token||!repo){status.textContent+=' - أدخل التوكن للنشر للجميع';return;}status.textContent='⏳ جاري النشر للجميع...';try{let sh1=null,sh2=null;const g1=await fetch(`https://api.github.com/repos/${repo}/contents/tools.json`,{headers:{Authorization:`token ${token}`}});if(g1.ok)sh1=(await g1.json()).sha;await fetch(`https://api.github.com/repos/${repo}/contents/tools.json`,{method:'PUT',headers:{Authorization:`token ${token}`,'Content-Type':'application/json'},body:JSON.stringify({message:'Update tools',content:btoa(unescape(encodeURIComponent(JSON.stringify(tools,null,2)))),sha:sh1})});const g2=await fetch(`https://api.github.com/repos/${repo}/contents/settings.json`,{headers:{Authorization:`token ${token}`}});if(g2.ok)sh2=(await g2.json()).sha;await fetch(`https://api.github.com/repos/${repo}/contents/settings.json`,{method:'PUT',headers:{Authorization:`token ${token}`,'Content-Type':'application/json'},body:JSON.stringify({message:'Update settings with ads',content:btoa(unescape(encodeURIComponent(JSON.stringify(S,null,2)))),sha:sh2})});status.textContent='✅ تم النشر للجميع! الموقع هيتحدث خلال دقيقة';}catch(e){status.textContent='❌ خطأ: '+e.message;}}
+</script></body></html>
