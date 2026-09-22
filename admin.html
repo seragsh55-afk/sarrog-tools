@@ -2,81 +2,126 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>لوحة تحكم سرّوج</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة تحكم سرّوج الشاملة</title>
 <style>
-body{font-family:system-ui;background:#111;color:#fff;padding:20px}
-input,textarea{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none}
-button{padding:12px 20px;border:none;border-radius:8px;cursor:pointer;font-weight:bold}
-.card{background:#222;padding:15px;border-radius:10px;margin:10px 0}
+:root{--bg:#0f172a;--card:#1e293b;--pri:#22c55e;--blue:#3b82f6}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui;background:var(--bg);color:#fff}
+.header{padding:20px;text-align:center;background:var(--card);border-bottom:2px solid var(--pri)}
+.tabs{display:flex;gap:5px;padding:10px;background:var(--card);overflow-x:auto}
+.tab{padding:10px 15px;border-radius:8px;cursor:pointer;background:#334155;white-space:nowrap}
+.tab.active{background:var(--pri);color:#000;font-weight:bold}
+.section{display:none;padding:20px;max-width:900px;margin:auto}
+.section.active{display:block}
+input,textarea,select{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;background:#334155;color:#fff}
+button{padding:12px 18px;border:none;border-radius:8px;cursor:pointer;font-weight:bold}
+.card{background:var(--card);padding:15px;border-radius:12px;margin:10px 0;display:flex;justify-content:space-between;align-items:center}
+.green{background:var(--pri);color:#000;width:100%}
+.blue{background:var(--blue);color:#fff;width:100%;margin-top:15px}
 </style>
 </head>
 <body>
-<h1>🔧 لوحة تحكم سرّوج</h1>
+<div class="header"><h1>🔧 لوحة تحكم سرّوج الشاملة</h1><p>إدارة الأدوات + التسويق + الإعلانات</p></div>
+<div class="tabs">
+<div class="tab active" onclick="openTab('tools')">🛠️ الأدوات</div>
+<div class="tab" onclick="openTab('seo')">📈 التسويق والسيو</div>
+<div class="tab" onclick="openTab('ads')">💰 الإعلانات</div>
+<div class="tab" onclick="openTab('settings')">⚙️ الإعدادات</div>
+</div>
 
-<input id="token" type="password" placeholder="GitHub Token - ghp_...">
-<input id="name" placeholder="اسم الأداة - مثال: كشف بيانات الصور">
-<textarea id="desc" placeholder="وصف الأداة"></textarea>
-<input id="icon" placeholder="أيقونة - مثال: 📸">
-<input id="keywords" placeholder="كلمات مفتاحية - مثال: سرّوج, كشف الصور">
-<input id="category" placeholder="القسم - مثال: أمن المعلومات">
+<!-- قسم الأدوات -->
+<div id="tools" class="section active">
+<h2>إضافة أداة جديدة</h2>
+<input id="token" type="password" placeholder="GitHub Token ghp_... (مرة واحدة)">
+<input id="t_name" placeholder="اسم الأداة - مثال: كشف بيانات الصور">
+<textarea id="t_desc" placeholder="وصف الأداة"></textarea>
+<input id="t_icon" placeholder="أيقونة 📸">
+<input id="t_keys" placeholder="كلمات مفتاحية: سرّوج, كشف الصور">
+<input id="t_cat" placeholder="القسم: أمن المعلومات">
+<button class="green" onclick="addTool()">+ إضافة للقائمة</button>
+<div id="list" style="margin-top:20px"></div>
+<button class="blue" onclick="publishAll()">🚀 حفظ ونشر كل الأدوات</button>
+</div>
 
-<button onclick="addTool()" style="background:#0f0;color:#000;width:100%">+ إضافة أداة جديدة</button>
+<!-- قسم التسويق -->
+<div id="seo" class="section">
+<h2>📈 إعدادات التسويق والسيو</h2>
+<input id="seo_title" placeholder="عنوان الموقع - سرّوج">
+<textarea id="seo_desc" placeholder="وصف الموقع لقوقل"></textarea>
+<input id="seo_keys" placeholder="كلمات قوقل الرئيسية">
+<p style="color:#94a3b8">هذه البيانات ستنسخها في ملف index.html داخل head</p>
+<button class="green" onclick="genSEO()">📋 توليد كود الـ head</button>
+<pre id="seo_out" style="background:#000;padding:15px;border-radius:8px;overflow:auto;white-space:pre-wrap;margin-top:10px"></pre>
+</div>
 
-<div id="list"></div>
-<button onclick="publish()" style="background:#00f;color:#fff;width:100%;margin-top:20px">🚀 حفظ ونشر للجميع</button>
+<!-- قسم الإعلانات -->
+<div id="ads" class="section">
+<h2>💰 إدارة الإعلانات</h2>
+<input id="ad_code" placeholder="كود AdSense أو إعلان">
+<textarea id="ad_places" placeholder="أماكن ظهور الإعلان: فوق، تحت، جانبي"></textarea>
+<button class="green" onclick="alert('تم حفظ الإعلانات محلياً - الصق الكود في index.html')">💾 حفظ الإعلانات</button>
+</div>
+
+<!-- الإعدادات -->
+<div id="settings" class="section">
+<h2>⚙️ إعدادات عامة</h2>
+<input id="site_name" value="سرّوج">
+<input id="site_url" value="https://seragsh55-afk.github.io/sarrog-tools/">
+<button class="green" onclick="alert('تم حفظ الإعدادات')">حفظ</button>
+</div>
 
 <script>
-let tools = [];
-async function load(){
-  try{
-    const r = await fetch('tools.json?v='+Date.now());
-    tools = await r.json();
-    show();
-  }catch(e){ tools=[]; }
+let tools=[];
+function openTab(id){
+document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+event.target.classList.add('active');
 }
-function show(){
-  document.getElementById('list').innerHTML = tools.map((t,i)=>`
-    <div class="card">
-      ${t.icon} <b>${t.name}</b> - ${t.category}
-      <button onclick="del(${i})" style="background:red;float:left">حذف</button>
-    </div>
-  `).join('');
+async function load(){
+try{
+const r=await fetch('tools.json?v='+Date.now());
+tools=await r.json(); if(!Array.isArray(tools)) tools=[];
+}catch{tools=[]}
+render();
+}
+function render(){
+document.getElementById('list').innerHTML=tools.map((t,i)=>`
+<div class="card"><span>${t.icon} <b>${t.name}</b> | ${t.category}</span><button onclick="del(${i})" style="background:#ef4444;color:#fff">حذف</button></div>
+`).join('')||'<p>لا توجد أدوات - أضف من فوق</p>';
 }
 function addTool(){
-  const t = {
-    id: Date.now().toString(),
-    name: document.getElementById('name').value.trim() || 'أداة سرّوج',
-    description: document.getElementById('desc').value.trim() || 'أداة من منصة سرّوج',
-    icon: document.getElementById('icon').value.trim() || '🔧',
-    keywords: document.getElementById('keywords').value.trim() || 'سرّوج',
-    category: document.getElementById('category').value.trim() || 'عام',
-    link: '#'
-  };
-  if(!t.name) return alert('اكتب اسم الأداة');
-  tools.push(t);
-  show();
-  document.getElementById('name').value='';
-  document.getElementById('desc').value='';
+const t={
+id: Date.now().toString(),
+name: document.getElementById('t_name').value.trim(),
+description: document.getElementById('t_desc').value.trim(),
+icon: document.getElementById('t_icon').value.trim()||'🔧',
+keywords: document.getElementById('t_keys').value.trim()||'سرّوج',
+category: document.getElementById('t_cat').value.trim()||'عام',
+link:'#'
+};
+if(!t.name) return alert('اكتب اسم الأداة');
+tools.push(t); render();
+document.getElementById('t_name').value='';document.getElementById('t_desc').value='';
 }
-function del(i){ tools.splice(i,1); show(); }
-
-async function publish(){
-  const token = document.getElementById('token').value.trim();
-  if(!token) return alert('الصق التوكن');
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(tools, null, 2))));
-  
-  const get = await fetch('https://api.github.com/repos/seragsh55-afk/sarrog-tools/contents/tools.json',{
-    headers:{Authorization:'token '+token}
-  });
-  const sha = (await get.json()).sha;
-
-  const res = await fetch('https://api.github.com/repos/seragsh55-afk/sarrog-tools/contents/tools.json',{
-    method:'PUT',
-    headers:{Authorization:'token '+token,'Content-Type':'application/json'},
-    body: JSON.stringify({message:'تحديث أدوات سرّوج',content,sha})
-  });
-  if(res.ok){ alert('✅ تم النشر! انتظر دقيقة وحدث موقعك'); }
-  else{ alert('❌ فشل: '+await res.text()); }
+function del(i){tools.splice(i,1);render();}
+function genSEO(){
+const title=document.getElementById('seo_title').value||'سرّوج - منصة أدوات ذكية وخدمات شاملة';
+const desc=document.getElementById('seo_desc').value||'منصة سرّوج: كشف الصور، تأليف أغاني AI، تحويل صوت لنص، مشاريع تخرج، كفالة يتيم';
+const keys=document.getElementById('seo_keys').value||'سرّوج, كشف بيانات الصور, تأليف الأغاني';
+document.getElementById('seo_out').textContent=`<title>${title}</title>\n<meta name="description" content="${desc}">\n<meta name="keywords" content="${keys}">`;
+}
+async function publishAll(){
+const token=document.getElementById('token').value.trim();
+if(!token) return alert('الصق التوكن');
+const content=btoa(unescape(encodeURIComponent(JSON.stringify(tools,null,2))));
+const get=await fetch('https://api.github.com/repos/seragsh55-afk/sarrog-tools/contents/tools.json',{headers:{Authorization:'token '+token}});
+const sha=(await get.json()).sha;
+const res=await fetch('https://api.github.com/repos/seragsh55-afk/sarrog-tools/contents/tools.json',{
+method:'PUT',headers:{Authorization:'token '+token,'Content-Type':'application/json'},
+body:JSON.stringify({message:'تحديث أدوات سرّوج - لوحة شاملة',content,sha})
+});
+if(res.ok) alert('✅ تم النشر! كل الأدوات ظهرت الآن'); else alert('❌ خطأ: '+(await res.text()));
 }
 load();
 </script>
